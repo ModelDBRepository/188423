@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+
+<!-- MODELED RETINA
+    
+    Jan 2015
+    
+    timothee.masquelier@alum.mit.edu
+    
+    This parameter file was used in: Masquelier T, Portelli G and Kornprobst P (2016). Microsaccades enable efficient synchrony-based coding in the retina: a simulation study. Scientific Reports. 
+    It tunes the Virtual Retina simulator (http://www-sop.inria.fr/neuromathcomp/public/software/virtualretina/) to mimic primate midget (parvocellular) RGCs,
+    arranged in a 80x80x2 array, corresponding to the fovea region (4x4 degrees)
+	There are 2 layers of ganglion cells: ON and OFF
+    The launching command should be something like that: Retina ../img/frame/*.jpg -ret human.parvo.xml -r 5 -outD ../data/ -nodisp
+	   -->
+ 
+<!-- INPUT SEQUENCE
+     By default, written for input sequences normalized between 0 and 255.
+     If you want to use the retina for a sequence coded between 0 and M, parameter 'input-luminosity-range' must be set at M.
+     -->
+
+<!-- SPATIAL SCALES
+     - All spatial filtering parameters with names 'sigma-blabla' are given in angular degrees on the retina, rather than in pixels. As well, the size of the fovea and the scaling factor outside of fovea. The correspondance with pixels is made through parameter 'pixels-per-degree'.
+     - Here, typical values for a primate fovea. 
+     - 'Your own' conversion when watching an image on a computer screen at a distance of one meter is roughly 100 pixels per retinal degree. So if you set 'pixels-per-degree'=P, your modeled retina will be watching the image on the screen from a distance of approx. P/100 meters = P centimeters.
+     -->
+
+
+<retina-description-file>
+
+	<!--<basic-microsaccade-generator
+		pixels-per-degree="200"
+		temporal-step__sec ="0.005"
+		angular-noise__pi-radians="0.3"
+		period-mean__sec=".2"
+		period-stdev__sec="0"
+		amplitude-mean__deg="0.5"
+		amplitude-stdev__deg="0.1"
+		saccade-duration-mean__sec="0.025"
+		saccade-duration-stdev__sec="0.005"/> -->
+
+	<retina temporal-step__sec ="0.001" 
+		input-luminosity-range="255" 
+		pixels-per-degree="25.0">
+
+		<!-- <log-polar-scheme fovea-radius__deg="1.0"
+				  scaling-factor-outside-fovea__inv-deg="1.0"/> -->
+		
+		<outer-plexiform-layer>
+			<linear-version 
+			center-sigma__deg="0.05" 
+			surround-sigma__deg="0.15" 
+			center-tau__sec="0.01"
+			surround-tau__sec="0.004" 
+			opl-amplification="10"
+			opl-relative-weight="1"
+			leaky-heat-equation="1">
+			<undershoot relative-weight="0.8" tau__sec="0.1"/>
+			</linear-version>
+		</outer-plexiform-layer>
+		
+		<contrast-gain-control
+		  opl-amplification__Hz="50"
+			bipolar-inert-leaks__Hz="50"
+			adaptation-sigma__deg="0.2"
+			adaptation-tau__sec="0.005"
+			adaptation-feedback-amplification__Hz="0"/>
+		
+		<!-- parvo -->				
+		<ganglion-layer
+			sign = "1"
+			transient-tau__sec="0.02"
+			transient-relative-weight="0.7"
+			bipolar-linear-threshold="0"
+			value-at-linear-threshold__Hz="37"
+			bipolar-amplification__Hz="100">
+			<spiking-channel
+				g-leak__Hz="50" sigma-V="0.1" refr-mean__sec="0.003"
+				refr-stdev__sec="0" random-init="0">
+				<square-array size-x__deg="4" size-y__deg="4" uniform-density__inv-deg="20" />
+			</spiking-channel>
+		</ganglion-layer>
+		
+		<ganglion-layer
+			sign = "-1"
+			transient-tau__sec="0.02"
+			transient-relative-weight="0.7"
+			bipolar-linear-threshold="0"
+			value-at-linear-threshold__Hz="37"
+			bipolar-amplification__Hz="100">
+			<spiking-channel
+				g-leak__Hz="50" sigma-V="0.1" refr-mean__sec="0.003"
+				refr-stdev__sec="0" random-init="0">
+				<square-array size-x__deg="4" size-y__deg="4" uniform-density__inv-deg="20" />
+			</spiking-channel>
+		</ganglion-layer>
+		
+		<!-- magno -->
+		<!-- <ganglion-layer
+			sign = "1"
+			transient-tau__sec="0.03"
+			transient-relative-weight="1.0"
+			bipolar-linear-threshold="0"
+			value-at-linear-threshold__Hz="80"
+			bipolar-amplification__Hz="400"
+			sigma-pool__deg="0.1">
+			<spiking-channel
+				g-leak__Hz="50" sigma-V="0" refr-mean__sec="0.003"
+				refr-stdev__sec="0" random-init="1">
+				<circular-array
+				fovea-density__inv-deg="15.0"/>
+			</spiking-channel>
+		</ganglion-layer>
+		
+		<ganglion-layer
+		        sign = "-1"
+		        transient-tau__sec="0.03"
+		        transient-relative-weight="1.0"
+		        bipolar-linear-threshold="0"
+		        value-at-linear-threshold__Hz="80"
+		        bipolar-amplification__Hz="400"
+			sigma-pool__deg="0.1">
+			<spiking-channel
+				g-leak__Hz="50" sigma-V="0" refr-mean__sec="0.003"
+				refr-stdev__sec="0" random-init="1">
+				<circular-array
+				fovea-density__inv-deg="15.0"/>
+			</spiking-channel>
+		</ganglion-layer> -->
+		
+	</retina>
+</retina-description-file>
+
+<!--  THATS ALL FOLKS! -->
+
